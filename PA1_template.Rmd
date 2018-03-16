@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='figure/',echo = TRUE)
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='_files/figure-html/',echo = TRUE)
 library(dplyr)
 library(ggplot2)
 ```
