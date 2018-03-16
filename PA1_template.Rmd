@@ -6,7 +6,9 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figures/',echo = TRUE)
+library(dplyr)
+library(ggplot2)
 ```
 
 ## R Markdown
@@ -14,11 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 This is an R Markdown document for Course Project 1 from Reproducible Research.  
 
 ### Loading and preprocessing the data
-```{r}
-library(dplyr)
-library(ggplot2)
-
-#download raw data
+```{r Loading_and_preprocessing_data}
 data_temp <- tempfile()
 download.file(
      "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip",
@@ -32,7 +30,7 @@ steps_raw$date <- as.Date(steps_raw$date, format = "%Y-%m-%d")
 ```
 
 ### Mean total number of steps taken per day
-```{r}
+```{r Mean_total_number_of_steps_taken_per_day}
 steps_total_day <- steps_raw %>%
      group_by(date) %>%
      summarize(total_steps = sum(steps)) %>%
@@ -53,7 +51,7 @@ ggplot(data = steps_total_day, aes(steps_total_day$total_steps)) +
 ```
 
 ### What is the average daily activity pattern?
-```{r}
+```{r What_is_the_average_daily_activity_pattern}
 steps_mean_interval <- steps_raw %>%
      filter(!is.na(steps)) %>%
      group_by(interval) %>%
@@ -76,7 +74,7 @@ ggplot(data = steps_mean_interval, aes(x = interval, y = mean_steps)) +
 
 ### Imputing missing values
 Imputing missing values via the mean of the interval.
-```{r}
+```{r Imputing_missing_values}
 steps_imputed <- steps_raw %>%
      left_join(by = "interval", steps_mean_interval) %>%
      mutate(steps = as.integer(ifelse(is.na(steps), mean_steps, steps))) %>%
@@ -104,12 +102,12 @@ ggplot(data = steps_total_day_imputed, aes(x = steps_total_day_imputed$total_ste
 The below table shows that the imputed mean and median are slightly lower than in the raw data.  This implies that missing data were disproportionately from intervals were activity was lower.  
 
 The standard deviation of the imputed data, however, is significantly lower, as we would expect by adding more "mean" data.
-```{r}
+```{r Imputed_summary}
 raw_imputed_summary
 ```
 
 ### Differences between weekdays and weekends
-```{r}
+```{r Differences_between_weekdays_and_weekends}
 steps_interval_imputed <- steps_imputed %>%
      mutate(day_type = ifelse(
           weekdays(date) == "Saturday" |
