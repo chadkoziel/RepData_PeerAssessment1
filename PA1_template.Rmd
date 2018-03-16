@@ -79,29 +79,35 @@ steps_imputed <- steps_raw %>%
      left_join(by = "interval", steps_mean_interval) %>%
      mutate(steps = as.integer(ifelse(is.na(steps), mean_steps, steps))) %>%
      mutate(dataset = "Imputed")
-
+     
 steps_total_day_imputed <- steps_imputed %>%
      group_by(date, dataset) %>%
      summarize(total_steps = sum(steps)) %>%
      select(date, total_steps, dataset)
-
-
-raw_imputed_summary <- data.frame(c("Mean","Median","Std.Dev."),c(mean(steps_total_day_imputed$total_steps),
-median(steps_total_day_imputed$total_steps),
-sd(steps_total_day_imputed$total_steps)),
-c(mean(steps_total_day$total_steps),
-median(steps_total_day$total_steps),
-sd(steps_total_day$total_steps)))
-
-colnames(raw_imputed_summary) <- c("Statistic","Imputed","Raw")
-
-ggplot(data = steps_total_day_imputed, aes(x = steps_total_day_imputed$total_steps)) +
+     
+     
+raw_imputed_summary <-
+     data.frame(c("Mean", "Median", "Std.Dev."),
+     c(
+     mean(steps_total_day_imputed$total_steps),
+     median(steps_total_day_imputed$total_steps),
+     sd(steps_total_day_imputed$total_steps)
+     ),
+     c(
+     mean(steps_total_day$total_steps),
+     median(steps_total_day$total_steps),
+     sd(steps_total_day$total_steps)
+     ))
+     
+colnames(raw_imputed_summary) <- c("Statistic", "Imputed", "Raw")
+     
+     ggplot(data = steps_total_day_imputed, aes(x = steps_total_day_imputed$total_steps)) +
      geom_histogram() +
      labs(x = "Total Steps", y = "Count of Days")
 ```
-The below table shows that the imputed mean and median are slightly lower than in the raw data.  This implies that missing data were disproportionately from intervals were activity was lower.  
+The below table shows that the imputed mean and median are slightly lower than in the raw data.  This implies that missing data were disproportionately from intervals where activity was lower.  
 
-The standard deviation of the imputed data, however, is significantly lower, as we would expect by adding more "mean" data.
+The standard deviation of the imputed data, however, is significantly lower, as we would expect because imputation added more "mean" data.
 ```{r Imputed_summary}
 raw_imputed_summary
 ```
