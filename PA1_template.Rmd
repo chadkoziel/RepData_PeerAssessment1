@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is an R Markdown document for Course Project 1 from Reproducible Research.  
 
-###Loading and preprocessing the data
+### Loading and preprocessing the data
 ```{r}
 library(dplyr)
 library(ggplot2)
@@ -31,7 +31,7 @@ unlink(data_temp)
 steps_raw$date <- as.Date(steps_raw$date, format = "%Y-%m-%d")
 ```
 
-###Mean total number of steps taken per day
+### Mean total number of steps taken per day
 ```{r}
 steps_total_day <- steps_raw %>%
      group_by(date) %>%
@@ -52,7 +52,7 @@ ggplot(data = steps_total_day, aes(steps_total_day$total_steps)) +
               label = annotation_text1)
 ```
 
-###What is the average daily activity pattern?
+### What is the average daily activity pattern?
 ```{r}
 steps_mean_interval <- steps_raw %>%
      filter(!is.na(steps)) %>%
@@ -74,7 +74,7 @@ ggplot(data = steps_mean_interval, aes(x = interval, y = mean_steps)) +
               label = annotation_text2)
 ```
 
-###Imputing missing values
+### Imputing missing values
 Imputing missing values via the mean of the interval.
 ```{r}
 steps_imputed <- steps_raw %>%
@@ -108,7 +108,7 @@ The standard deviation of the imputed data, however, is significantly lower, as 
 raw_imputed_summary
 ```
 
-###Differences between weekdays and weekends
+### Differences between weekdays and weekends
 ```{r}
 steps_interval_imputed <- steps_imputed %>%
      mutate(day_type = ifelse(
